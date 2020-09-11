@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <!-- 日志级别 -->
+    <springProperty scope="context" name="LOG_ROOT_LEVEL" source="logging.level.root" defaultValue="INFO"/>
+    <!-- 日志目录名称 -->
+    <property name="LOG_HOME" value="log"/>
+    <!-- 日志文件编码 -->
+    <property name="LOG_CHARSET" value="UTF-8"/>
+    <!-- 日志文件路径 -->
+    <property name="LOG_DIR" value="${LOG_HOME}/%d{yyyyMMdd}"/>
+    <!-- 日志格式化 -->
+    <property name="LOG_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%-20thread] [%X{traceId}] [%X{username}] %-5level %logger{50} : %msg %n"/>
+    <!-- 控制台日志格式化 -->
+    <property name="CONSOLE_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%-20thread] [%X{traceId}] [%X{username}] %highlight(%-5level) %cyan(%logger{50}) : %msg %n"/>
+    <!-- 文件大小，默认10MB -->
+    <property name="MAX_FILE_SIZE" value="10MB"/>
+    <!-- 配置日志的滚动时间 ，表示只保留最近 30 天的日志-->
+    <property name="MAX_HISTORY" value="30"/>
+
+    <!-- 输出到控制台 -->
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <!-- 输出的日志内容格式化-->
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <pattern>${CONSOLE_PATTERN}</pattern>
+        </layout>
+    </appender>
+
+    <!-- ALL 日志文件 -->
+    <appender name="FILE_ALL" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!-- 设置滚动策略 -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!--日志文件路径 -->
+            <FileNamePattern>${LOG_DIR}/all/all.%d{yyyyMMdd}.%i.log</FileNamePattern>
+            <!-- 保留最近指定日期的日志 -->
+            <MaxHistory>${MAX_HISTORY}</MaxHistory>
+            <!-- 当天的日志大小超过指定大小时，写入新文件 -->
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>${MAX_FILE_SIZE}</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+        <!-- 输出的日志内容格式化-->
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <pattern>${LOG_PATTERN}</pattern>
+        </layout>
+    </appender>
+
+    <!-- ERROR 日志文件 -->
+    <appender name="FILE_ERROR" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!-- 只输出ERROR日志 -->
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>ERROR</level>
+            <OnMismatch>DENY</OnMismatch>
+            <OnMatch>ACCEPT</OnMatch>
+        </filter>
+        <!-- 设置滚动策略 -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!--日志文件路径 -->
+            <FileNamePattern>${LOG_DIR}/err/err.%d{yyyyMMdd}.%i.log</FileNamePattern>
+            <!-- 保留最近指定日期的日志 -->
+            <MaxHistory>${MAX_HISTORY}</MaxHistory>
+            <!-- 当天的日志大小超过指定大小时，写入新文件 -->
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>${MAX_FILE_SIZE}</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+        <!-- 输出的日志内容格式化-->
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <Pattern>${LOG_PATTERN}</Pattern>
+        </layout>
+    </appender>
+
+    <!-- ${LOG_ROOT_LEVEL} 日志级别 -->
+    <root level="${LOG_ROOT_LEVEL}">
+        <!-- 标识这个"${STDOUT}"将会添加到这个logger -->
+        <appender-ref ref="STDOUT"/>
+        <!-- FILE_ALL 日志输出添加到 logger -->
+        <appender-ref ref="FILE_ALL"/>
+        <!-- FILE_ERROR 日志输出添加到 logger -->
+        <appender-ref ref="FILE_ERROR"/>
+    </root>
+</configuration>

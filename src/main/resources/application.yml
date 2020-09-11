@@ -1,0 +1,22 @@
+server:
+  port: 8888
+spring:
+  application:
+    name: vue-mall
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/vue-mall?useUnicode=true&characterEncoding=UTF-8&userSSL=false&serverTimezone=Asia/Shanghai
+    username: root
+    password: 123456
+mybatis:
+  type-aliases-package: com.example.vuemall.pojo
+  configuration:
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+mall:
+  jwt:
+    secret: vue-mall@login&admin)secret^demo
+    pubKeyPath: E:\Workspace\Idea\vue-mall\src\main\java\com\example\mall\rsa\rsa.pub
+    priKeyPath: E:\Workspace\Idea\vue-mall\src\main\java\com\example\mall\rsa\rsa.pri
+    expire: 300  # 过期时间300分钟
+    cookieName: MALL_TOKEN
