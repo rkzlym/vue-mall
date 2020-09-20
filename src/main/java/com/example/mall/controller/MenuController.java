@@ -1,11 +1,9 @@
 package com.example.mall.controller;
 
+import com.example.mall.domain.common.CommonResult;
 import com.example.mall.domain.vo.MenuVo;
 import com.example.mall.service.MenuService;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -19,8 +17,13 @@ public class MenuController {
         this.menuService = menuService;
     }
 
+    @GetMapping("list")
+    public CommonResult<List<MenuVo>> list(){
+        return CommonResult.success(menuService.select());
+    }
+
     @PostMapping("list")
-    public ResponseEntity<List<MenuVo>> list(){
-        return ResponseEntity.ok(menuService.select());
+    public CommonResult<List<MenuVo>> list(@RequestParam("authIds") List<Long> authIds){
+        return CommonResult.success(menuService.select(authIds));
     }
 }

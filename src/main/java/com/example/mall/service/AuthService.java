@@ -23,14 +23,9 @@ public class AuthService {
     }
 
     public String login(String username, String password) {
-        User user = userService.queryUser(username, password);
-        if (user == null) throw new SystemException(ExceptionEnum.INVALID_USERNAME_PASSWORD);
-
-        UserVo userVo = new UserVo();
-        userVo.setId(user.getId());
-        userVo.setUsername(user.getUsername());
+        UserVo user = userService.select(username, password);
         try {
-            return JwtUtils.generateToken(userVo, this.prop.getPrivateKey(), this.prop.getExpire());
+            return JwtUtils.generateToken(user, this.prop.getPrivateKey(), this.prop.getExpire());
         } catch (Exception e) {
             log.error("[授权中心] 生成Token失败 用户名: {}", username, e);
             throw new SystemException(ExceptionEnum.INVALID_USERNAME_PASSWORD);

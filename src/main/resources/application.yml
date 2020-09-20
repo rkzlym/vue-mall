@@ -18,5 +18,8 @@ mall:
     secret: vue-mall@login&admin)secret^demo
     pubKeyPath: E:\Workspace\Idea\vue-mall\src\main\java\com\example\mall\rsa\rsa.pub
     priKeyPath: E:\Workspace\Idea\vue-mall\src\main\java\com\example\mall\rsa\rsa.pri
-    expire: 300  # 过期时间300分钟
+    expire: 3000  # 过期时间3000分钟
     cookieName: MALL_TOKEN
+logging:
+  level:
+    com.example.mall.mapper: debug

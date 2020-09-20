@@ -28,17 +28,13 @@ public class LoginInterceptor implements HandlerInterceptor {
      */
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        Cookie[] cookies = request.getCookies();
-        if (cookies.length == 0) return false;
-
-        for (Cookie cookie : cookies) {
-            if (!StringUtils.equals(cookie.getName(), "MALL_TOKEN")) continue;
-            try {
-                UserVo user = JwtUtils.getInfoFromToken(cookie.getValue(), prop.getPublicKey());
-                MDC.put(MdcConstants.MDC_KEY_USERNAME, user.getUsername());
-            } catch (Exception e) {
-                return false;
-            }
+        String token = request.getHeader("Authorization");
+        try {
+            UserVo user = JwtUtils.getInfoFromToken(token, prop.getPublicKey());
+            MDC.put(MdcConstants.MDC_KEY_USERNAME, user.getUsername());
+        } catch (Exception e) {
+            log.info("用户登录失败，token已失效");
+            return false;
         }
         return true;
     }

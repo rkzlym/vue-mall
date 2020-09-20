@@ -1,5 +1,7 @@
 package com.example.mall.service;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.example.mall.domain.model.Menu;
 import com.example.mall.domain.vo.MenuVo;
 import com.example.mall.mapper.MenuMapper;
@@ -21,6 +23,15 @@ public class MenuService {
 
     public List<MenuVo> select() {
         List<Menu> menus = menuMapper.selectList(null);
+        return buildMenus(menus);
+    }
+
+    public List<MenuVo> select(List<Long> authIds){
+        List<Menu> menus = menuMapper.selectList(Wrappers.<Menu>lambdaQuery().in(Menu::getAuthId, authIds));
+        return buildMenus(menus);
+    }
+
+    private List<MenuVo> buildMenus(List<Menu> menus){
         List<MenuVo> menuVos = SuperBeanUtils.copyListProperties(menus, MenuVo::new);
         List<MenuVo> menuParents = new ArrayList<>();
 
@@ -32,6 +43,7 @@ public class MenuService {
         // 递归设置子菜单
         for (MenuVo menuVo : menuParents)
             menuVo.setSubMenus(getSubMenus(menuVo.getId(), menuVos));
+
         return menuParents;
     }
 

@@ -9,16 +9,17 @@ import lombok.experimental.Accessors;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.Date;
 
-@TableName("tb_menu")
+@TableName("tb_role")
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-public class Menu implements Serializable {
+public class Role implements Serializable {
+
+    private static final long serialVersionUID=1L;
 
     /* 主键 */
-    @TableId(type = IdType.AUTO)
+    @TableId(value = "id", type = IdType.AUTO)
     private Long id;
 
     /* 创建时间 */
@@ -33,15 +34,9 @@ public class Menu implements Serializable {
     /* 是否已删除 */
     private Boolean isDelete;
 
-    /* 菜单名称 */
-    private String name;
-
-    /* 菜单地址 */
-    private String url;
-
-    /* 父菜单ID */
-    private Long parentId;
-
     /* 权限表ID */
     private Long authId;
+
+    /* 角色名称 */
+    private String name;
 }
