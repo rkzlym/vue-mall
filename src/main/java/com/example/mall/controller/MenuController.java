@@ -23,7 +23,7 @@ public class MenuController {
     }
 
     @PostMapping("list")
-    public CommonResult<List<MenuVo>> list(@RequestParam("authIds") List<Long> authIds){
-        return CommonResult.success(menuService.select(authIds));
+    public CommonResult<List<MenuVo>> list(@RequestParam("roleIds") List<Long> roleIds){
+        return CommonResult.success(menuService.select());
     }
 }

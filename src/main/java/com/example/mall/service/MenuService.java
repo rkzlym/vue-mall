@@ -1,24 +1,27 @@
 package com.example.mall.service;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.example.mall.domain.model.Menu;
+import com.example.mall.domain.model.Role;
 import com.example.mall.domain.vo.MenuVo;
 import com.example.mall.mapper.MenuMapper;
 import com.example.mall.utils.SuperBeanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class MenuService {
 
     private final MenuMapper menuMapper;
 
-    public MenuService(MenuMapper menuMapper) {
+    private final RoleService roleService;
+
+    public MenuService(MenuMapper menuMapper, RoleService roleService) {
         this.menuMapper = menuMapper;
+        this.roleService = roleService;
     }
 
     public List<MenuVo> select() {
@@ -26,10 +29,19 @@ public class MenuService {
         return buildMenus(menus);
     }
 
-    public List<MenuVo> select(List<Long> authIds){
-        List<Menu> menus = menuMapper.selectList(Wrappers.<Menu>lambdaQuery().in(Menu::getAuthId, authIds));
-        return buildMenus(menus);
-    }
+//    public List<MenuVo> select(List<Long> roleIds){
+//        List<Role> roles = roleService.select(roleIds);
+//        Set<Long> authIds = new HashSet<>();
+//        for (Role role : roles) {
+//            String roleAuthIds = role.getAuthIds();
+//            if (StringUtils.isNotBlank(roleAuthIds)){
+//                String[] arr = roleAuthIds.split(",");
+//                authIds.addAll(Arrays.stream(arr).mapToLong(Long::parseLong).boxed().collect(Collectors.toList()));
+//            }
+//        }
+//        List<Menu> menus = menuMapper.selectList(Wrappers.<Menu>lambdaQuery().in(Menu::getAuthId, authIds));
+//        return buildMenus(menus);
+//    }
 
     private List<MenuVo> buildMenus(List<Menu> menus){
         List<MenuVo> menuVos = SuperBeanUtils.copyListProperties(menus, MenuVo::new);

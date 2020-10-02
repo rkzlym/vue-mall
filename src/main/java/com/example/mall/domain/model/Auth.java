@@ -36,4 +36,13 @@ public class Auth implements Serializable {
 
     /* 权限名称 */
     private String name;
+
+    /* 权限等级 */
+    private Integer level;
+
+    /* 父权限ID */
+    private Long parentId;
+
+    /* 是否是最后的子菜单 */
+    private Boolean isLast;
 }

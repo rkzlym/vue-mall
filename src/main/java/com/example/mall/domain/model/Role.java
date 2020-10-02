@@ -9,6 +9,7 @@ import lombok.experimental.Accessors;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @TableName("tb_role")
 @Data
@@ -34,9 +35,15 @@ public class Role implements Serializable {
     /* 是否已删除 */
     private Boolean isDelete;
 
-    /* 权限表ID */
-    private Long authId;
+    /* 角色对应的父权限ID */
+    private String authParentIds;
+
+    /* 权限表ID列表 */
+    private String authIds;
 
     /* 角色名称 */
-    private String name;
+    private String roleName;
+
+    /* 角色描述 */
+    private String roleDesc;
 }
